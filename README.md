@@ -1,6 +1,6 @@
 ## 👋 Hi, I'm Oliver Tipton  
 
-I’m a Senior Computer Science student at Davidson College, graduating in May 2025, with a specialization in backend and blockchain engineering. My work has focused on smart contract security, smart contract development, and building consumer DeFi products.  
+I’m a Davidson College CS Graduate (2025), with a specialization in backend and blockchain engineering. My work has focused on smart contract security, smart contract development, and building consumer DeFi products.  
 
 ### Experience  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
