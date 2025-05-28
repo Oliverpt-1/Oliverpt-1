@@ -13,6 +13,6 @@ I’m a Davidson College CS Graduate (2025), with a specialization in backend an
    *Built a real-time observability dashboard for Avalanche subnets, tracking metrics like TPS, gas usage, block data, and ERC20 transfers.*
    
 ### Get in Touch  
-📧 **oltipton@davidson.edu** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
+📧 **oliver@tiptonfarms.com** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
 
 Thank you!
