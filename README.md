@@ -9,7 +9,9 @@ I’m a Senior Computer Science student at Davidson College, graduating in May 2
    *Developing automated ad-tech solutions.*  
 -  **Founder and President - Davidson Blockchain**  
    *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
-
+-  **Honorable Mention - Avalanche Summit Hackathon (AvaScope)**  
+   *Built a real-time observability dashboard for Avalanche subnets, tracking metrics like TPS, gas usage, block data, and ERC20 transfers.*
+   
 ### Get in Touch  
 📧 **oltipton@davidson.edu** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
 
