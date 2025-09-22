@@ -6,7 +6,9 @@ Check out my [open-source contributions](https://github.com/Oliverpt-1/open-sour
 
 ### Experience  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
-   *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*  
+   *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
+-  **1st Place - ENS Track @ ETHGlobal NYC** (Eaze)
+   *Built a smart wallet which allows users to sign and pay using their face + ENS domain.
 -  **Founding Engineer at CTVBuyer**  
    *Developing automated ad-tech solutions.*  
 -  **Founder and President - Davidson Blockchain**  
