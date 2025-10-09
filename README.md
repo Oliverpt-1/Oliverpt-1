@@ -5,12 +5,12 @@ I’m a Davidson College CS Graduate (2025), with a specialization in backend an
 Check out my [open-source contributions](https://github.com/Oliverpt-1/open-source-contributions)
 
 ### Experience  
+-  **Software Developer at Gemini**  
+   *Building onchain. DeFi consumer products (Gemini Smart Wallet) and staking.*  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
    *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
 -  **1st Place - ENS Track @ ETHGlobal NYC** (Eaze)
    *Built a smart wallet which allows users to sign and pay using their face + ENS domain.
--  **Founding Engineer at CTVBuyer**  
-   *Developing automated ad-tech solutions.*  
 -  **Founder and President - Davidson Blockchain**  
    *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
 -  **Honorable Mention - Avalanche Summit Hackathon (AvaScope)**  
