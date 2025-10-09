@@ -6,7 +6,7 @@ Check out my [open-source contributions](https://github.com/Oliverpt-1/open-sour
 
 ### Experience  
 -  **Software Developer at Gemini**  
-   *Building onchain. DeFi consumer products (Gemini Smart Wallet) and staking.*  
+   *Building onchain. DeFi consumer products (Gemini Smart Wallet) and staking teams.*  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
    *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
 -  **1st Place - ENS Track @ ETHGlobal NYC** (Eaze)
