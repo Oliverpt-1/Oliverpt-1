@@ -9,8 +9,8 @@ Check out my [open-source contributions](https://github.com/Oliverpt-1/open-sour
    *Building onchain. DeFi consumer products (Gemini Smart Wallet) and staking teams.*  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
    *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
--  **1st Place - ENS Track @ ETHGlobal NYC**
-   *Built a smart wallet which allows users to sign and pay using their face + ENS domain.
+-  **1st Place - ENS Track @ ETHGlobal NYC** (Ease)
+   *Built a smart wallet which allows users to sign and pay using their face + ENS domain.*
 -  **Founder and President - Davidson Blockchain**  
    *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
 -  **Honorable Mention - Avalanche Summit Hackathon (AvaScope)**  
