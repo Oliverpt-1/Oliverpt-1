@@ -17,6 +17,6 @@ Check out my [open-source contributions](https://github.com/Oliverpt-1/open-sour
    *Built a real-time observability dashboard for Avalanche subnets, tracking metrics like TPS, gas usage, block data, and ERC20 transfers.*
    
 ### Get in Touch  
-📧 **oliver@tiptonfarms.com** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
+📧 **oliverptipton@gmail.com** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
 
 Thank you!
