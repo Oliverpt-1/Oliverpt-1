@@ -11,10 +11,10 @@ Check out my [open-source contributions](https://github.com/Oliverpt-1/open-sour
    *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
 -  **1st Place - ENS Track @ ETHGlobal NYC** (Ease)
    *Built a smart wallet which allows users to sign and pay using their face + ENS domain.*
--  **Founder and President - Davidson Blockchain**  
-   *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
 -  **Honorable Mention - Avalanche Summit Hackathon (AvaScope)**  
    *Built a real-time observability dashboard for Avalanche subnets, tracking metrics like TPS, gas usage, block data, and ERC20 transfers.*
+-  **Founder and President - Davidson Blockchain**  
+   *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
    
 ### Get in Touch  
 📧 **oliverptipton@gmail.com** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
