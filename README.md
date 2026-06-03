@@ -1,6 +1,6 @@
 ## 👋 Hi, I'm Oliver Tipton  
 
-I’m a Software Engineer at Gemini, with a specialization in backend and blockchain engineering. My work has focused on smart contract security, smart contract development, and building consumer DeFi products.  
+I’m an Integration Engineer at Morpho, with a specialization in backend and blockchain engineering. My work has focused on smart contract development, distributed systems, and building consumer DeFi products.  
 ### Open-Source
 Check out my [open-source contributions](https://github.com/Oliverpt-1/open-source-contributions)
 
