@@ -35,12 +35,13 @@ labeled AS (
   FROM wstats
 )
 
-SELECT symbol, segment, trades, wallets, volume_usd FROM (
-  SELECT x.sym AS symbol, l.segment,
-    count(*) AS trades,
-    count(distinct x.trader_id) AS wallets,
-    round(sum(x.amount_usd)) AS volume_usd,
-    sum(sum(x.amount_usd)) OVER (PARTITION BY x.sym) AS tot
-  FROM xtrades x JOIN labeled l ON x.trader_id = l.trader_id
-  GROUP BY 1,2
-) ORDER BY tot DESC, symbol, segment
+SELECT x.sym AS symbol,
+  round(sum(if(l.segment='Retail', x.amount_usd, 0))) AS retail_volume,
+  round(sum(if(l.segment='Bot',    x.amount_usd, 0))) AS bot_volume,
+  count_if(l.segment='Retail') AS retail_trades,
+  count_if(l.segment='Bot')    AS bot_trades,
+  count(distinct if(l.segment='Retail', x.trader_id, null)) AS retail_wallets,
+  count(distinct if(l.segment='Bot',    x.trader_id, null)) AS bot_wallets,
+  round(sum(x.amount_usd)) AS total_volume
+FROM xtrades x JOIN labeled l ON x.trader_id = l.trader_id
+GROUP BY 1 ORDER BY total_volume DESC

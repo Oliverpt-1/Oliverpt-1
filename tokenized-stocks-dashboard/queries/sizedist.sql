@@ -35,9 +35,11 @@ labeled AS (
   FROM wstats
 )
 
-SELECT bucket, bucket_order, l.segment,
-  count(*) AS trades,
-  round(sum(x.amount_usd)) AS volume_usd
+SELECT bucket, bucket_order,
+  count_if(l.segment='Retail') AS retail_trades,
+  count_if(l.segment='Bot')    AS bot_trades,
+  round(sum(if(l.segment='Retail', x.amount_usd, 0))) AS retail_volume,
+  round(sum(if(l.segment='Bot',    x.amount_usd, 0))) AS bot_volume
 FROM xtrades x
 JOIN labeled l ON x.trader_id = l.trader_id
 CROSS JOIN LATERAL (
@@ -56,4 +58,4 @@ CROSS JOIN LATERAL (
     WHEN x.amount_usd < 100000 THEN 5
     ELSE 6 END AS bucket_order
 ) b
-GROUP BY 1,2,3 ORDER BY bucket_order, segment
+GROUP BY 1,2 ORDER BY bucket_order

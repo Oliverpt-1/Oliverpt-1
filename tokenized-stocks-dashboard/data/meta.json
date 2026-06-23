@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-23T14:46:35Z",
+  "last_updated": "2026-06-23T16:59:35Z",
   "window_days": 365,
   "query_ids": {
     "taxonomy": 7789343,
@@ -7,7 +7,23 @@
     "token": 7789355,
     "hourly": 7789357,
     "sizedist": 7789359,
-    "topbots": 7789366
+    "topbots": 7789366,
+    "kpi": 7789559,
+    "viz": {
+      "kpi0": 11757949,
+      "kpi1": 11757950,
+      "kpi2": 11757952,
+      "kpi3": 11757955,
+      "kpi4": 11757956,
+      "kpi5": 11757961,
+      "hourly": 11757971,
+      "size": 11757973,
+      "taxpie": 11757986,
+      "topbots": 11757989,
+      "daily": 11758069,
+      "token": 11758071
+    },
+    "dashboard_id": 214865
   },
   "source": "dex_solana.trades (Dune)"
 }

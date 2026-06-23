@@ -35,8 +35,10 @@ labeled AS (
   FROM wstats
 )
 
-SELECT hour(x.block_time) AS hour_utc, l.segment,
-  count(*) AS trades,
-  round(sum(x.amount_usd)) AS volume_usd
+SELECT hour(x.block_time) AS hour_utc,
+  round(sum(if(l.segment='Retail', x.amount_usd, 0))) AS retail_volume,
+  round(sum(if(l.segment='Bot',    x.amount_usd, 0))) AS bot_volume,
+  count_if(l.segment='Retail') AS retail_trades,
+  count_if(l.segment='Bot')    AS bot_trades
 FROM xtrades x JOIN labeled l ON x.trader_id = l.trader_id
-GROUP BY 1,2 ORDER BY 1,2
+GROUP BY 1 ORDER BY 1

@@ -90,19 +90,14 @@ function renderKPIs(tax) {
 }
 
 /* ---------------- Daily stacked ---------------- */
-let dailyChart, dailyRaw, dailyMetric = 'volume_usd', dailyRange = 180;
+let dailyChart, dailyRaw, dailyMetric = 'volume', dailyRange = 180;
 function buildDaily() {
-  const byDay = new Map();
-  for (const r of dailyRaw) {
-    if (!byDay.has(r.day)) byDay.set(r.day, { Retail: 0, Bot: 0 });
-    byDay.get(r.day)[r.segment] = r[dailyMetric] || 0;
-  }
-  let days = [...byDay.keys()].sort();
-  if (dailyRange < 9999) days = days.slice(-dailyRange);
-  const retail = days.map(d => byDay.get(d).Retail);
-  const bot = days.map(d => byDay.get(d).Bot);
-  const labels = days.map(d => d.slice(5));
-  const isUSD = dailyMetric === 'volume_usd';
+  let rows = [...dailyRaw].sort((a, b) => a.day < b.day ? -1 : 1);
+  if (dailyRange < 9999) rows = rows.slice(-dailyRange);
+  const retail = rows.map(d => +d['retail_' + dailyMetric] || 0);
+  const bot = rows.map(d => +d['bot_' + dailyMetric] || 0);
+  const labels = rows.map(d => d.day.slice(5));
+  const isUSD = dailyMetric === 'volume';
   const fmt = isUSD ? fmtUSD : fmtNum;
 
   const mk = (ctx, color) => { const g = ctx.createLinearGradient(0, 0, 0, 300); g.addColorStop(0, color + '55'); g.addColorStop(1, color + '08'); return g; };
@@ -151,12 +146,7 @@ function buildTax() {
 
 /* ---------------- Token dominance ---------------- */
 function buildToken(tokenRaw) {
-  const m = new Map();
-  for (const r of tokenRaw) {
-    if (!m.has(r.symbol)) m.set(r.symbol, { Retail: 0, Bot: 0 });
-    m.get(r.symbol)[r.segment] += r.volume_usd || 0;
-  }
-  let arr = [...m.entries()].map(([sym, v]) => ({ sym, ...v, tot: v.Retail + v.Bot }))
+  let arr = tokenRaw.map(r => ({ sym: r.symbol, Retail: +r.retail_volume || 0, Bot: +r.bot_volume || 0, tot: +r.total_volume || 0 }))
     .filter(x => x.tot > 50000);
   arr.sort((a, b) => b.tot - a.tot);
   arr = arr.slice(0, 16).sort((a, b) => (b.Bot / b.tot) - (a.Bot / a.tot));
@@ -195,7 +185,7 @@ function buildToken(tokenRaw) {
 /* ---------------- Hourly retail share ---------------- */
 function buildHourly(hourlyRaw) {
   const hv = Array.from({ length: 24 }, () => ({ Retail: 0, Bot: 0 }));
-  for (const r of hourlyRaw) hv[r.hour_utc][r.segment] = r.volume_usd || 0;
+  for (const r of hourlyRaw) hv[r.hour_utc] = { Retail: +r.retail_volume || 0, Bot: +r.bot_volume || 0 };
   const share = hv.map(h => { const t = h.Retail + h.Bot; return t ? +(h.Retail / t * 100).toFixed(1) : 0; });
   const avg = share.reduce((a, b) => a + b, 0) / 24;
   const labels = hv.map((_, i) => String(i).padStart(2, '0'));
@@ -248,11 +238,12 @@ function buildHourly(hourlyRaw) {
 
 /* ---------------- Size distribution ---------------- */
 function buildSize(sizeRaw) {
-  const order = [...new Set(sizeRaw.sort((a, b) => a.bucket_order - b.bucket_order).map(r => r.bucket))];
-  const seg = { Retail: {}, Bot: {} }, tot = { Retail: 0, Bot: 0 };
-  for (const r of sizeRaw) { seg[r.segment][r.bucket] = r.trades; tot[r.segment] += r.trades; }
-  const retail = order.map(b => +((seg.Retail[b] || 0) / tot.Retail * 100).toFixed(1));
-  const bot = order.map(b => +((seg.Bot[b] || 0) / tot.Bot * 100).toFixed(1));
+  const rows = [...sizeRaw].sort((a, b) => a.bucket_order - b.bucket_order);
+  const order = rows.map(r => r.bucket);
+  const totR = rows.reduce((a, r) => a + (+r.retail_trades || 0), 0);
+  const totB = rows.reduce((a, r) => a + (+r.bot_trades || 0), 0);
+  const retail = rows.map(r => +((+r.retail_trades || 0) / totR * 100).toFixed(1));
+  const bot = rows.map(r => +((+r.bot_trades || 0) / totB * 100).toFixed(1));
 
   new Chart($('#sizeChart'), {
     type: 'bar',

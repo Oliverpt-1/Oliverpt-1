@@ -105,7 +105,24 @@ def viz(key, query_id, vtype, name, options):
     return vid
 
 RETAIL, BOT = "#2dd4bf", "#f5a524"
-SERIES_COLORS = {"seriesOptions": {"Retail": {"color": RETAIL}, "Bot": {"color": BOT}}}
+def chart_opts(gtype, xcol, retail_col, bot_col, stacked=False,
+               yfmt="0.00a", retail_name="Retail", bot_name="Bot"):
+    """Build a Dune chart options blob in the canonical (wide-format) schema:
+    one y-column per series, seriesOptions keyed by column name."""
+    return {
+        "globalSeriesType": gtype,
+        "columnMapping": {xcol: "x", retail_col: "y", bot_col: "y"},
+        "legend": {"enabled": True},
+        "sortX": True, "reverseX": False,
+        "xAxis": {"type": "-"},
+        "yAxis": [{"type": "linear", "tickFormat": yfmt}],
+        "series": {"stacking": "stack" if stacked else None},
+        "stacking": "stack" if stacked else None,
+        "seriesOptions": {
+            retail_col: {"name": retail_name, "color": RETAIL, "type": gtype, "yAxis": 0, "zIndex": 1},
+            bot_col:    {"name": bot_name,    "color": BOT,    "type": gtype, "yAxis": 0, "zIndex": 0},
+        },
+    }
 
 def main():
     q = manifest
@@ -123,28 +140,24 @@ def main():
     counter_ids = [viz(f"kpi{i}", kpi, "counter", nm, {"counterColName": col, "rowNumber": 1})
                    for i, (nm, col) in enumerate(counters)]
 
-    # ---- charts ----
-    daily = viz("daily", q["daily"], "chart", "Daily volume - retail vs bots", {
-        "globalSeriesType": "area", "stacking": "stack", "series": {"stacking": "stack"},
-        "showLegend": True,
-        "columnMapping": {"day": "x", "volume_usd": "y", "segment": "series"}, **SERIES_COLORS})
+    # ---- charts (wide format: one y-column per series) ----
+    daily = viz("daily2", q["daily"], "chart", "Daily volume - retail vs bots ($)",
+                chart_opts("area", "day", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
 
-    token = viz("token", q["token"], "chart", "Volume by stock - retail vs bots", {
-        "globalSeriesType": "bar", "stacking": "stack", "series": {"stacking": "stack"},
-        "showLegend": True,
-        "columnMapping": {"symbol": "x", "volume_usd": "y", "segment": "series"}, **SERIES_COLORS})
+    token = viz("token2", q["token"], "chart", "Volume by stock - retail vs bots ($)",
+                chart_opts("bar", "symbol", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
 
-    hourly = viz("hourly", q["hourly"], "chart", "Volume by hour of day (UTC)", {
-        "globalSeriesType": "line", "showLegend": True,
-        "columnMapping": {"hour_utc": "x", "volume_usd": "y", "segment": "series"}, **SERIES_COLORS})
+    hourly = viz("hourly2", q["hourly"], "chart", "Volume by hour of day, UTC ($)",
+                 chart_opts("line", "hour_utc", "retail_volume", "bot_volume", stacked=False, yfmt="$0.0a"))
 
-    size = viz("size", q["sizedist"], "chart", "Trades by ticket size", {
-        "globalSeriesType": "column", "showLegend": True,
-        "columnMapping": {"bucket": "x", "trades": "y", "segment": "series"}, **SERIES_COLORS})
+    size = viz("size2", q["sizedist"], "chart", "Trades by ticket size",
+               chart_opts("column", "bucket", "retail_trades", "bot_trades", stacked=False, yfmt="0a"))
 
-    tax_pie = viz("taxpie", q["taxonomy"], "chart", "Volume by wallet segment", {
-        "globalSeriesType": "pie", "showLegend": True,
-        "columnMapping": {"subtype": "x", "volume_usd": "y"}})
+    tax_pie = viz("taxpie2", q["taxonomy"], "chart", "Volume by wallet segment", {
+        "globalSeriesType": "pie", "legend": {"enabled": True},
+        "showDataLabels": True, "numberFormat": "$0.0a",
+        "columnMapping": {"subtype": "x", "volume_usd": "y"},
+        "seriesOptions": {"volume_usd": {"color": BOT}}})
 
     topbots = viz("topbots", q["topbots"], "table", "Top bot wallets", {})
 
