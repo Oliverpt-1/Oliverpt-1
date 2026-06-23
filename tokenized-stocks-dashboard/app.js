@@ -53,13 +53,14 @@ function renderKPIs(tax) {
   const bot = tax.filter(r => r.segment === 'Bot').reduce((a, r) => ({ wallets: a.wallets + r.wallets, trades: a.trades + r.trades, vol: a.vol + r.volume_usd }), { wallets: 0, trades: 0, vol: 0 });
   const retailVol = tot.vol - bot.vol;
 
+  const W = (window.__WINDOW_DAYS ? `last ${window.__WINDOW_DAYS}d` : 'last 365d');
   const cards = [
-    { label: 'Volume traded', value: fmtUSD(tot.vol), sub: 'all xStocks, window', cls: '' },
-    { label: 'Total trades', value: fmtNum(tot.trades), sub: 'DEX swaps', cls: '' },
-    { label: 'Unique wallets', value: fmtNum(tot.wallets), sub: 'distinct traders', cls: '' },
-    { label: 'Bot volume share', value: pct(bot.vol, tot.vol) + '%', sub: fmtUSD(bot.vol) + ' of volume', cls: 'bot' },
-    { label: 'Bot trade share', value: pct(bot.trades, tot.trades) + '%', sub: fmtNum(bot.trades) + ' trades', cls: 'bot' },
-    { label: 'Retail wallets', value: pct(tot.wallets - bot.wallets, tot.wallets) + '%', sub: 'of all wallets', cls: 'retail' },
+    { label: 'Volume traded', value: fmtUSD(tot.vol), sub: `sum · ${W}`, cls: '' },
+    { label: 'Total trades', value: fmtNum(tot.trades), sub: `DEX swaps · ${W}`, cls: '' },
+    { label: 'Unique wallets', value: fmtNum(tot.wallets), sub: `distinct · ${W}`, cls: '' },
+    { label: 'Bot volume share', value: pct(bot.vol, tot.vol) + '%', sub: fmtUSD(bot.vol) + ` · ${W}`, cls: 'bot' },
+    { label: 'Bot trade share', value: pct(bot.trades, tot.trades) + '%', sub: fmtNum(bot.trades) + ` trades · ${W}`, cls: 'bot' },
+    { label: 'Retail wallets', value: pct(tot.wallets - bot.wallets, tot.wallets) + '%', sub: `of all · ${W}`, cls: 'retail' },
   ];
   $('#kpis').innerHTML = cards.map(c => `
     <div class="kpi ${c.cls}">
@@ -308,7 +309,7 @@ function wireToggles() {
 
 function setMeta(meta, dash) {
   if (meta.last_updated) $('#lastUpdated').textContent = meta.last_updated.slice(0, 10);
-  if (meta.window_days) { $('#windowDays').textContent = meta.window_days; $('#windowDays2').textContent = meta.window_days; }
+  if (meta.window_days) { window.__WINDOW_DAYS = meta.window_days; $('#windowDays').textContent = meta.window_days; $('#windowDays2').textContent = meta.window_days; }
   const ids = meta.query_ids || {};
   const names = { taxonomy: 'Segment taxonomy', daily: 'Daily activity', token: 'Per-stock', hourly: 'Hour-of-day', sizedist: 'Trade size', topbots: 'Top bots' };
   const dashUrl = dash && dash.dashboard_url;

@@ -105,8 +105,14 @@ def viz(key, query_id, vtype, name, options):
     return vid
 
 RETAIL, BOT = "#2dd4bf", "#f5a524"
+WIN = int(WINDOW)
+WLABEL = f"last {WIN}d"
+_start = time.strftime("%d %b %Y", time.gmtime(time.time() - WIN * 86400))
+_end = time.strftime("%d %b %Y", time.gmtime())
+WRANGE = f"{_start} – {_end}"  # e.g. "23 Jun 2025 – 23 Jun 2026"
+
 def chart_opts(gtype, xcol, retail_col, bot_col, stacked=False,
-               yfmt="0.00a", retail_name="Retail", bot_name="Bot"):
+               yfmt="0.00a", xtitle="", ytitle="", retail_name="Retail", bot_name="Bot"):
     """Build a Dune chart options blob in the canonical (wide-format) schema:
     one y-column per series, seriesOptions keyed by column name."""
     return {
@@ -114,8 +120,8 @@ def chart_opts(gtype, xcol, retail_col, bot_col, stacked=False,
         "columnMapping": {xcol: "x", retail_col: "y", bot_col: "y"},
         "legend": {"enabled": True},
         "sortX": True, "reverseX": False,
-        "xAxis": {"type": "-"},
-        "yAxis": [{"type": "linear", "tickFormat": yfmt}],
+        "xAxis": {"type": "-", "title": {"text": xtitle}},
+        "yAxis": [{"type": "linear", "tickFormat": yfmt, "title": {"text": ytitle}}],
         "series": {"stacking": "stack" if stacked else None},
         "stacking": "stack" if stacked else None,
         "seriesOptions": {
@@ -128,45 +134,52 @@ def main():
     q = manifest
     kpi = ensure_kpi()
 
-    # ---- counters (KPIs) ----
+    # ---- counters (KPIs) — every figure is a trailing-window total/share ----
     counters = [
-        ("Volume traded (USD, millions)", "total_volume_musd"),
-        ("Total trades", "total_trades"),
-        ("Unique wallets", "unique_wallets"),
-        ("Bot share of volume (%)", "bot_volume_pct"),
-        ("Bot share of trades (%)", "bot_trade_pct"),
-        ("Retail share of wallets (%)", "retail_wallet_pct"),
+        (f"Volume traded · {WLABEL} (USD M)", "total_volume_musd"),
+        (f"Total trades · {WLABEL}", "total_trades"),
+        (f"Unique wallets · {WLABEL}", "unique_wallets"),
+        (f"Bot share of volume · {WLABEL} (%)", "bot_volume_pct"),
+        (f"Bot share of trades · {WLABEL} (%)", "bot_trade_pct"),
+        (f"Retail share of wallets · {WLABEL} (%)", "retail_wallet_pct"),
     ]
-    counter_ids = [viz(f"kpi{i}", kpi, "counter", nm, {"counterColName": col, "rowNumber": 1})
+    counter_ids = [viz(f"kpi{i}_t", kpi, "counter", nm, {"counterColName": col, "rowNumber": 1})
                    for i, (nm, col) in enumerate(counters)]
 
     # ---- charts (wide format: one y-column per series) ----
-    daily = viz("daily2", q["daily"], "chart", "Daily volume - retail vs bots ($)",
-                chart_opts("area", "day", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
+    daily = viz("daily3", q["daily"], "chart", f"Daily volume - retail vs bots · {WLABEL} ($)",
+                chart_opts("area", "day", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a",
+                           xtitle="Date", ytitle="Volume / day (USD)"))
 
-    token = viz("token3", q["token"], "chart", "Volume by stock - retail vs bots ($)",
-                chart_opts("column", "symbol", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
+    token = viz("token4", q["token"], "chart", f"Volume by stock - retail vs bots · {WLABEL} ($)",
+                chart_opts("column", "symbol", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a",
+                           xtitle="Stock (top 25 by volume)", ytitle=f"Volume, {WLABEL} (USD)"))
 
-    hourly = viz("hourly2", q["hourly"], "chart", "Volume by hour of day, UTC ($)",
-                 chart_opts("line", "hour_utc", "retail_volume", "bot_volume", stacked=False, yfmt="$0.0a"))
+    hourly = viz("hourly3", q["hourly"], "chart", f"Volume by hour of day, UTC · {WLABEL} ($)",
+                 chart_opts("line", "hour_utc", "retail_volume", "bot_volume", stacked=False, yfmt="$0.0a",
+                            xtitle="Hour of day (UTC)", ytitle=f"Volume summed over {WLABEL} (USD)"))
 
-    size = viz("size2", q["sizedist"], "chart", "Trades by ticket size",
-               chart_opts("column", "bucket", "retail_trades", "bot_trades", stacked=False, yfmt="0a"))
+    size = viz("size3", q["sizedist"], "chart", f"Trades by ticket size · {WLABEL}",
+               chart_opts("column", "bucket", "retail_trades", "bot_trades", stacked=False, yfmt="0a",
+                          xtitle="Trade size (USD)", ytitle=f"Trades, {WLABEL}"))
 
-    tax_pie = viz("taxpie2", q["taxonomy"], "chart", "Volume by wallet segment", {
+    tax_pie = viz("taxpie3", q["taxonomy"], "chart", f"Volume by wallet segment · {WLABEL}", {
         "globalSeriesType": "pie", "legend": {"enabled": True},
         "showDataLabels": True, "numberFormat": "$0.0a",
         "columnMapping": {"subtype": "x", "volume_usd": "y"},
         "seriesOptions": {"volume_usd": {"color": BOT}}})
 
-    topbots = viz("topbots", q["topbots"], "table", "Top bot wallets", {})
+    topbots = viz("topbots2", q["topbots"], "table", f"Top bot wallets · {WLABEL}", {})
 
     # ---- text ----
-    title = ("# Tokenized Stocks: Retail vs. Bots\n"
+    title = (f"# Tokenized Stocks: Retail vs. Bots\n"
              "On-chain trading of Backed **xStocks** (TSLAx, SPYx, CRCLx, NVDAx, AAPLx, …) on "
-             "**Solana**, over the last 365 days. Wallets are split into **human retail** vs. "
-             "**automated bots** (arbitrage / market-makers, high-frequency, high-volume traders). "
-             "Source: `dex_solana.trades`.")
+             "**Solana**. Wallets are split into **human retail** vs. **automated bots** "
+             "(arbitrage / market-makers, high-frequency, high-volume traders). "
+             "Source: `dex_solana.trades`.\n\n"
+             f"⏱️ **Time window:** every metric on this dashboard covers the **trailing {WIN} days "
+             f"({WRANGE})** — the full life of on-chain xStocks trading. Totals are cumulative over "
+             "that window; the daily chart shows the day-by-day breakdown.")
     method = ("## Methodology\n"
               "A wallet is a **bot** if it meets *any* of: (1) **arbitrage / MM** — bought and sold the "
               "same stock inside one Solana slot (~400 ms); (2) **high-frequency** — ≥ 50 trades per "
@@ -181,16 +194,16 @@ def main():
     def tw(text, row, col, sx, sy): return {"text": text, "position": {"row": row, "col": col, "size_x": sx, "size_y": sy}}
 
     text_widgets, viz_widgets = [], []
-    text_widgets.append(tw(title, 0, 0, 24, 3))
+    text_widgets.append(tw(title, 0, 0, 24, 4))
     for i, cid in enumerate(counter_ids):
-        viz_widgets.append(vw(cid, 3, i * 4, 4, 3))
-    viz_widgets.append(vw(daily, 6, 0, 16, 7))
-    viz_widgets.append(vw(tax_pie, 6, 16, 8, 7))
-    viz_widgets.append(vw(token, 13, 0, 12, 8))
-    viz_widgets.append(vw(size, 13, 12, 12, 8))
-    viz_widgets.append(vw(hourly, 21, 0, 12, 7))
-    viz_widgets.append(vw(topbots, 21, 12, 12, 7))
-    text_widgets.append(tw(method, 28, 0, 24, 4))
+        viz_widgets.append(vw(cid, 4, i * 4, 4, 3))
+    viz_widgets.append(vw(daily, 7, 0, 16, 7))
+    viz_widgets.append(vw(tax_pie, 7, 16, 8, 7))
+    viz_widgets.append(vw(token, 14, 0, 12, 8))
+    viz_widgets.append(vw(size, 14, 12, 12, 8))
+    viz_widgets.append(vw(hourly, 22, 0, 12, 7))
+    viz_widgets.append(vw(topbots, 22, 12, 12, 7))
+    text_widgets.append(tw(method, 29, 0, 24, 4))
 
     # ---- dashboard ----
     did = q.get("dashboard_id")
