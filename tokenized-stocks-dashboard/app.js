@@ -315,13 +315,16 @@ function wireToggles() {
   });
 }
 
-function setMeta(meta) {
+function setMeta(meta, dash) {
   if (meta.last_updated) $('#lastUpdated').textContent = meta.last_updated.slice(0, 10);
   if (meta.window_days) { $('#windowDays').textContent = meta.window_days; $('#windowDays2').textContent = meta.window_days; }
   const ids = meta.query_ids || {};
   const names = { taxonomy: 'Segment taxonomy', daily: 'Daily activity', token: 'Per-stock', hourly: 'Hour-of-day', sizedist: 'Trade size', topbots: 'Top bots' };
+  const dashUrl = dash && dash.dashboard_url;
   const first = Object.values(ids)[0];
-  if (first) { const u = `https://dune.com/queries/${first}`; $('#duneLink').href = u; $('#footDune').href = u; }
+  const headerUrl = dashUrl || (first && `https://dune.com/queries/${first}`);
+  if (headerUrl) { $('#duneLink').href = headerUrl; $('#footDune').href = headerUrl; }
+  if (dashUrl) $('#duneLink').textContent = 'Open on Dune ↗';
   $('#queryLinks').innerHTML = '<span style="color:var(--faint);font-size:12px;align-self:center;margin-right:4px">Live Dune queries:</span>' +
     Object.entries(ids).map(([k, id]) => `<a href="https://dune.com/queries/${id}" target="_blank" rel="noopener">${names[k] || k} ↗</a>`).join('');
 }
@@ -331,7 +334,8 @@ async function main() {
   try {
     const [meta, tax, daily, token, hourly, size, bots] = await Promise.all(
       ['meta', 'taxonomy', 'daily', 'token', 'hourly', 'sizedist', 'topbots'].map(loadJSON));
-    setMeta(meta);
+    const dash = await loadJSON('dune_dashboard').catch(() => null);
+    setMeta(meta, dash);
     renderKPIs(tax);
     taxRaw = tax; buildTax();
     dailyRaw = daily; buildDaily();

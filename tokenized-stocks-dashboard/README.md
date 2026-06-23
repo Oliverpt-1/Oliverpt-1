@@ -3,6 +3,16 @@
 A Dune-powered dashboard that separates **human retail** from **automated bots** in the on-chain
 trading of tokenized equities — Backed **xStocks** (TSLAx, SPYx, CRCLx, NVDAx, AAPLx, …) on Solana.
 
+**▶ Live native Dune dashboard:** https://dune.com/oliverpt_11645/tokenized-stocks-retail-vs-bots
+
+This repo ships the work in two forms:
+
+1. **A native dashboard on dune.com** — six public Dune queries + a KPI query, twelve visualizations
+   and two text panels, all created programmatically through Dune's dashboard API
+   (see [`scripts/build_dune_dashboard.py`](scripts/build_dune_dashboard.py)).
+2. **A standalone, self-contained web dashboard** in this repo (custom-designed, no backend) that
+   renders the same data — screenshot below.
+
 ![Dashboard preview](assets/preview.png)
 
 > **Headline (trailing 365 days):** bots are **22.8%** of wallets but **92.4%** of trades and
