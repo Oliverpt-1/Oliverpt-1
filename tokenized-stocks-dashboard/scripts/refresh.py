@@ -99,7 +99,7 @@ SELECT x.sym AS symbol,
   count(distinct if(l.segment='Bot',    x.trader_id, null)) AS bot_wallets,
   round(sum(x.amount_usd)) AS total_volume
 FROM xtrades x JOIN labeled l ON x.trader_id = l.trader_id
-GROUP BY 1 ORDER BY total_volume DESC
+GROUP BY 1 ORDER BY total_volume DESC LIMIT 25
 """),
 
 "hourly": ("Tokenized Stocks - Retail vs Bots - Hour-of-day pattern", CLASSIFY + """

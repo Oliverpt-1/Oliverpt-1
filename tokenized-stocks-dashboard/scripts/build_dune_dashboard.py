@@ -144,8 +144,8 @@ def main():
     daily = viz("daily2", q["daily"], "chart", "Daily volume - retail vs bots ($)",
                 chart_opts("area", "day", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
 
-    token = viz("token2", q["token"], "chart", "Volume by stock - retail vs bots ($)",
-                chart_opts("bar", "symbol", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
+    token = viz("token3", q["token"], "chart", "Volume by stock - retail vs bots ($)",
+                chart_opts("column", "symbol", "retail_volume", "bot_volume", stacked=True, yfmt="$0.0a"))
 
     hourly = viz("hourly2", q["hourly"], "chart", "Volume by hour of day, UTC ($)",
                  chart_opts("line", "hour_utc", "retail_volume", "bot_volume", stacked=False, yfmt="$0.0a"))
