@@ -5,7 +5,7 @@ I’m a Solutions Engineer at Morpho, with a specialization in backend and block
 Check out my [open-source contributions](https://github.com/Oliverpt-1/open-source-contributions)
 
 ### Experience  
--  **Integration Engineer at Morpho**
+-  **Solutions Engineer at Morpho**
 -  **Software Engineer at Gemini**  
    *Built DeFi consumer products (Gemini Invest Product) and worked on institutional/retail staking team.*  
 -  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
