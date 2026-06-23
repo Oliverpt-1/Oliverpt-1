@@ -1,0 +1,13 @@
+{
+  "last_updated": "2026-06-23T14:46:35Z",
+  "window_days": 365,
+  "query_ids": {
+    "taxonomy": 7789343,
+    "daily": 7789351,
+    "token": 7789355,
+    "hourly": 7789357,
+    "sizedist": 7789359,
+    "topbots": 7789366
+  },
+  "source": "dex_solana.trades (Dune)"
+}

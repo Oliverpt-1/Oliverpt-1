@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tokenized Stocks: Retail vs. Bots — Dune Dashboard</title>
+<meta name="description" content="On-chain analysis of retail vs. automated (bot) trading in tokenized equities (Backed xStocks) on Solana. Powered by Dune." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="logo-dot"></span>
+      <div>
+        <div class="brand-title">Tokenized Stocks · <span class="accent">Retail vs. Bots</span></div>
+        <div class="brand-sub">On-chain trading of Backed <strong>xStocks</strong> on Solana</div>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="updated">Updated <span id="lastUpdated">—</span></div>
+      <a class="pill" id="duneLink" href="https://dune.com" target="_blank" rel="noopener">Data · Dune ↗</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>A handful of bots move most of the money in tokenized stocks.</h1>
+    <p class="lede">
+      Tokenized equities like <strong>TSLAx</strong>, <strong>SPYx</strong> and <strong>CRCLx</strong>
+      trade 24/7 on Solana DEXs. This dashboard separates <span class="t-retail">human retail</span> wallets
+      from <span class="t-bot">automated bots</span> (arbitrage, market-makers, high-frequency traders)
+      to show who is actually driving the activity over the last <strong id="windowDays">365</strong> days.
+    </p>
+  </section>
+
+  <!-- KPI CARDS -->
+  <section class="kpi-grid" id="kpis"></section>
+
+  <!-- SIGNATURE SPLIT -->
+  <section class="card span-12">
+    <div class="card-head">
+      <div>
+        <h2>The 80/20 of tokenized stock trading</h2>
+        <p class="card-sub">Share of wallets, trades and USD volume — retail vs. bots.</p>
+      </div>
+    </div>
+    <div id="splitBars" class="split-bars"></div>
+    <p class="footnote" id="splitTakeaway"></p>
+  </section>
+
+  <div class="grid-2">
+    <!-- DAILY TREND -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Daily activity</h2>
+          <p class="card-sub">Retail vs. bot, stacked over time.</p>
+        </div>
+        <div class="controls">
+          <div class="seg" id="metricToggle">
+            <button data-metric="volume_usd" class="active">Volume</button>
+            <button data-metric="trades">Trades</button>
+            <button data-metric="wallets">Wallets</button>
+          </div>
+          <div class="seg" id="rangeToggle">
+            <button data-range="30">30d</button>
+            <button data-range="90">90d</button>
+            <button data-range="180" class="active">180d</button>
+            <button data-range="9999">All</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="dailyChart"></canvas></div>
+    </section>
+
+    <!-- TAXONOMY DONUT -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Who are the bots?</h2>
+          <p class="card-sub">Wallet segments by behaviour.</p>
+        </div>
+        <div class="seg" id="taxToggle">
+          <button data-metric="volume_usd" class="active">Volume</button>
+          <button data-metric="wallets">Wallets</button>
+        </div>
+      </div>
+      <div class="chart-box donut-box">
+        <canvas id="taxChart"></canvas>
+        <div class="donut-center" id="donutCenter"></div>
+      </div>
+      <div id="taxLegend" class="legend"></div>
+    </section>
+  </div>
+
+  <!-- PER STOCK -->
+  <section class="card span-12">
+    <div class="card-head">
+      <div>
+        <h2>Bot dominance by stock</h2>
+        <p class="card-sub">Bot share of USD volume per ticker (top 16 by volume). Longer orange bar = more bot-driven.</p>
+      </div>
+    </div>
+    <div class="chart-box tall"><canvas id="tokenChart"></canvas></div>
+  </section>
+
+  <div class="grid-2">
+    <!-- HOURLY -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Humans sleep, bots don't</h2>
+          <p class="card-sub">Retail share of volume by hour (UTC). US market hours shaded.</p>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="hourlyChart"></canvas></div>
+    </section>
+
+    <!-- SIZE DIST -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Trade-size fingerprint</h2>
+          <p class="card-sub">Share of each segment's trades by ticket size.</p>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="sizeChart"></canvas></div>
+    </section>
+  </div>
+
+  <!-- TOP BOTS -->
+  <section class="card span-12">
+    <div class="card-head">
+      <div>
+        <h2>Top bot wallets</h2>
+        <p class="card-sub">Highest-volume automated wallets in the window. Click a wallet to open Solscan.</p>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="botTable">
+        <thead><tr>
+          <th>#</th><th>Wallet</th><th>Type</th>
+          <th class="num">Trades</th><th class="num">Active days</th>
+          <th class="num">Stocks</th><th class="num">Same-slot arbs</th><th class="num">Volume</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="card span-12 method">
+    <h2>Methodology</h2>
+    <div class="method-grid">
+      <div>
+        <h3>Data</h3>
+        <p>Every Solana DEX trade involving a Backed <strong>xStock</strong> token (mint prefixed
+        <code>Xs…</code>, ticker suffixed <code>…x</code>) from Dune's <code>dex_solana.trades</code>,
+        over the trailing <strong id="windowDays2">365</strong> days. Six SQL queries run on Dune power
+        every chart on this page.</p>
+      </div>
+      <div>
+        <h3>Classifying a wallet as a bot</h3>
+        <p>A wallet is labelled a <span class="t-bot">bot</span> if it meets <em>any</em> of:</p>
+        <ul>
+          <li><strong>Arbitrage / MM</strong> — bought <em>and</em> sold the same stock inside one Solana
+          slot (~400&nbsp;ms). Humans can't round-trip an asset within a single block.</li>
+          <li><strong>High-frequency</strong> — averages ≥&nbsp;50 trades per active day.</li>
+          <li><strong>High-volume</strong> — ≥&nbsp;1,000 trades in the window.</li>
+        </ul>
+        <p>Everything else is <span class="t-retail">retail</span>. The median retail wallet makes just a
+        couple of trades over the entire window.</p>
+      </div>
+      <div>
+        <h3>Caveats</h3>
+        <p>Heuristics, not ground truth: a sophisticated human is indistinguishable from a slow bot, and one
+        person can run many wallets. Centralized-exchange (e.g. Kraken) flow that settles off-chain isn't
+        captured. Volume is DEX swap notional and can include intermediate routing hops.</p>
+      </div>
+    </div>
+    <div id="queryLinks" class="query-links"></div>
+  </section>
+
+  <footer class="site-footer">
+    <span>Built for tokenized-stock market structure research.</span>
+    <span>Source: <a href="https://dune.com" target="_blank" rel="noopener" id="footDune">Dune Analytics</a> · <code>dex_solana.trades</code>. Not investment advice.</span>
+  </footer>
+</main>
+
+<script src="vendor/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
