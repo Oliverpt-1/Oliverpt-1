@@ -6,9 +6,7 @@ Previously, I was a **Software Engineer at Gemini**, where I worked on consumer 
 
 ## 🛠 Open Source
 
-I'm an open-source contributor to **Reth**, the Rust Ethereum execution client, and contribute to projects across Ethereum and DeFi infrastructure.
-
-You can find more of my open-source work [here](https://github.com/Oliverpt-1/open-source-contributions).
+You can find my open-source work [here](https://github.com/Oliverpt-1/open-source-contributions).
 
 ## 🏆 Projects
 
