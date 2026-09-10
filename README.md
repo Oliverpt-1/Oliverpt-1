@@ -1,24 +1,33 @@
 ## 👋 Hi, I'm Oliver Tipton  
 
-I’m a Solutions Engineer at Morpho, with a specialization in backend and blockchain engineering. My work has focused on smart contract development, distributed systems, and building consumer DeFi products.  
+I'm a **Solutions Engineer at Morpho** focused on backend engineering, smart contracts, and DeFi infrastructure.
 
-### Experience  
--  **Solutions Engineer at Morpho**
--  **Software Engineer at Gemini**  
-   *Built DeFi consumer products (Gemini Invest Product) and worked on institutional/retail staking team.*  
--  **1st Place - Uniswap Track @ Eigen Games Hackathon** (UniGuard)  
-   *Built a security and testing suite for Uniswap v4 hooks which was powered by Eigenlayer AVSs for security consensus and LLM models through Hyperbolic.*
--  **1st Place - ENS Track @ ETHGlobal NYC** (Ease)
-   *Built a smart wallet which allows users to sign and pay using their face + ENS domain.*
--  **Honorable Mention - Avalanche Summit Hackathon (AvaScope)**  
-   *Built a real-time observability dashboard for Avalanche subnets, tracking metrics like TPS, gas usage, block data, and ERC20 transfers.*
--  **Founder and President - Davidson Blockchain**  
-   *Educating students on blockchain technology, Web3 opportunities, and career paths in crypto.*
+Previously, I was a **Software Engineer at Gemini**, where I worked on consumer DeFi products as well as institutional and retail staking.
 
-### Open-Source
-Check out my [open-source contributions](https://github.com/Oliverpt-1/open-source-contributions)
+## 🛠 Open Source
 
-### Get in Touch  
-📧 **oliverptipton@gmail.com** | 🐦 **[@mroliverpt](https://x.com/mroliverpt)** | Telegram: **[@oltipton]**  
+I'm an open-source contributor to **Reth**, the Rust Ethereum execution client, and contribute to projects across Ethereum and DeFi infrastructure.
 
-Thank you!
+You can find more of my open-source work [here](https://github.com/Oliverpt-1/open-source-contributions).
+
+## 🏆 Projects
+
+**Ease — 1st Place, ENS Track at ETHGlobal NYC**  
+Built a smart wallet that allows users to sign transactions and make payments using facial authentication and an ENS domain.
+
+**UniGuard — 1st Place, Uniswap Track at Eigen Games**  
+Built a security and testing framework for Uniswap v4 hooks using EigenLayer AVSs for security consensus and LLM-powered analysis through Hyperbolic.
+
+**AvaScope — Honorable Mention, Avalanche Summit Hackathon**  
+Built an observability platform for Avalanche subnets, tracking TPS, gas usage, block activity, and ERC-20 transfers.
+
+## 🎓 Other
+
+**Founder and President, Davidson Blockchain**  
+Founded and led Davidson Blockchain, an organization focused on educating students about blockchain technology and careers in crypto.
+
+## 📫 Contact
+
+Email: **oliverptipton@gmail.com**  
+X: **[@mroliverpt](https://x.com/mroliverpt)**  
+Telegram: **@oltipton**
